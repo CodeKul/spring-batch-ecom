@@ -2,9 +2,11 @@ package com.codekul.ecommerce.tool;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.env.Environment;
+import org.springframework.web.context.annotation.SessionScope;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -27,5 +29,9 @@ public class FileTool {
         Path path = Paths.get(environment.getProperty("codekul.filePath")+name);
         Files.createFile(path);
         Files.write(path,data.getBytes());
+    }
+
+    public void writeFile(String name, MultipartFile file) throws IOException {
+        file.transferTo(new File(environment.getProperty("codekul.filePath")+name));
     }
 }

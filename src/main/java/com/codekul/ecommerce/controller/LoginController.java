@@ -1,6 +1,6 @@
 package com.codekul.ecommerce.controller;
 
-import com.codekul.ecommerce.User;
+import com.codekul.ecommerce.domain.User;
 import com.codekul.ecommerce.tool.FileTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -82,4 +83,14 @@ public class LoginController {
 
         return entity;
     }
+
+    @RequestMapping(value = "/something")
+    public ModelAndView getSomething(){
+        ModelAndView mav = new ModelAndView("index");
+        mav.addObject("userName","android");
+
+        return mav;
+    }
+
+
 }
