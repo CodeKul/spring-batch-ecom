@@ -1,6 +1,7 @@
 package com.codekul.ecommerce.controller;
 
 import com.codekul.ecommerce.domain.User;
+import com.codekul.ecommerce.repository.UserRepository;
 import com.codekul.ecommerce.tool.FileTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -13,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 /**
  * Created by aniruddha on 31/7/16.
@@ -92,5 +94,21 @@ public class LoginController {
         return mav;
     }
 
-
+    @PostMapping(value = "/user/new", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Callable<ResponseEntity<?>> createNewUser(@RequestBody User user){
+        return () -> {
+            ResponseEntity<Map<String,Object>> entity = null;
+            Map<String,Object> map = new HashMap<>();
+            try {
+//                repository.insert(user);
+                map.put("sts","success");
+                entity = new ResponseEntity<>(map,HttpStatus.OK);
+            }
+            catch (Exception e){
+                map.put("sts","fail");
+                entity = new ResponseEntity<>(map,HttpStatus.BAD_REQUEST);
+            }
+            return entity;
+        };
+    }
 }

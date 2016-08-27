@@ -1,5 +1,6 @@
 package com.codekul.ecommerce;
 
+import org.hibernate.SessionFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -8,8 +9,8 @@ import org.springframework.context.ApplicationContext;
 public class EcomApplication {
 
 	public static void main(String[] args) {
-
-		ApplicationContext context =
-				SpringApplication.run(EcomApplication.class, args);
+		for (String s : SpringApplication.run(EcomApplication.class, args).getBeanDefinitionNames()) {
+			System.out.println("---->"+s);
+		}
 	}
 }
