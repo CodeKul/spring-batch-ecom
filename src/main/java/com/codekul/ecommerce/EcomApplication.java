@@ -9,8 +9,7 @@ import org.springframework.context.ApplicationContext;
 public class EcomApplication {
 
 	public static void main(String[] args) {
-		for (String s : SpringApplication.run(EcomApplication.class, args).getBeanDefinitionNames()) {
-			System.out.println("---->"+s);
-		}
+		SpringApplication.run(EcomApplication.class, args);
+
 	}
 }

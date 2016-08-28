@@ -23,6 +23,9 @@ import java.util.concurrent.Callable;
 public class LoginController {
 
     @Autowired
+    private UserRepository repository;
+
+    @Autowired
     @Qualifier(value = "myTool")
     private FileTool tool ;
 
@@ -36,26 +39,48 @@ public class LoginController {
         this.tool = tool;
     }
 
+
+    @GetMapping(value = "/user/sample",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public Callable<ResponseEntity<?>> sampleUser(){
+
+        return () ->{
+            User user = new User();
+            user.setId(10l);
+            user.setPassword("android");
+            user.setUserName("android");
+
+            return new ResponseEntity<>(user,HttpStatus.OK);
+        };
+    }
+
     @RequestMapping(method = RequestMethod.POST, value = "/user",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<?> login(@RequestBody User user){
 
         ResponseEntity<HashMap<String,Object>> entity = null;
 
         HashMap<String,Object> map = new HashMap<>();
-        if(user.getUserName().equals("android")
-                && user.getPassword().equals("android")){
-            map.put("sts","success");
-            map.put("msg","Login Success :)");
-            entity = new ResponseEntity<>(map, HttpStatus.OK);
+
+        try{
+            if(repository.isValid(user.getUserName(),user.getPassword())){
+                map.put("sts","success");
+                map.put("msg","Login Success :)");
+                entity = new ResponseEntity<>(map, HttpStatus.OK);
+            }
+            else {
+                map.clear();
+
+                map.put("sts","fail");
+                map.put("msg","Login Failed :(");
+                entity = new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
+            }
         }
-        else{
+        catch (Exception e){
             map.clear();
 
             map.put("sts","fail");
             map.put("msg","Login Failed :(");
             entity = new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
         }
-
         return entity;
     }
 
@@ -95,20 +120,22 @@ public class LoginController {
     }
 
     @PostMapping(value = "/user/new", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Callable<ResponseEntity<?>> createNewUser(@RequestBody User user){
-        return () -> {
+    public ResponseEntity<?> createNewUser(@RequestBody User user){
+
+            System.out.println("User is - "+user);
+
             ResponseEntity<Map<String,Object>> entity = null;
             Map<String,Object> map = new HashMap<>();
             try {
-//                repository.insert(user);
+                repository.insert(user);
                 map.put("sts","success");
                 entity = new ResponseEntity<>(map,HttpStatus.OK);
             }
             catch (Exception e){
+                e.printStackTrace();
                 map.put("sts","fail");
                 entity = new ResponseEntity<>(map,HttpStatus.BAD_REQUEST);
             }
             return entity;
-        };
     }
 }

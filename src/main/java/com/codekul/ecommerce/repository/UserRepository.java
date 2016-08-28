@@ -8,4 +8,8 @@ import com.codekul.ecommerce.domain.User;
 public interface UserRepository extends BaseRepository<User> {
 
     User findOne(Long id) throws Exception;
+
+    User findByUserNameAndPassword(String userName, String password) throws Exception;
+
+    Boolean isValid(String userName, String password) throws Exception;
 }
