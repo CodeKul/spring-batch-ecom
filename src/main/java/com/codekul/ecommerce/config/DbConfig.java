@@ -15,6 +15,7 @@ import java.util.Properties;
  * Created by aniruddha on 27/8/16.
  */
 @Configuration
+@Deprecated
 public class DbConfig {
 
     @Bean

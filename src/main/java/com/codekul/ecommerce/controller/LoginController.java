@@ -1,6 +1,7 @@
 package com.codekul.ecommerce.controller;
 
 import com.codekul.ecommerce.domain.User;
+import com.codekul.ecommerce.jms.Book;
 import com.codekul.ecommerce.repository.UserRepository;
 import com.codekul.ecommerce.tool.FileTool;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -21,6 +23,9 @@ import java.util.concurrent.Callable;
  */
 @RestController
 public class LoginController {
+
+    @Autowired
+    private JmsTemplate jmsTemplate;
 
     @Autowired
     private UserRepository repository;
@@ -38,7 +43,6 @@ public class LoginController {
     public void setTool(@Qualifier(value = "myTool")FileTool tool) {
         this.tool = tool;
     }
-
 
     @GetMapping(value = "/user/sample",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Callable<ResponseEntity<?>> sampleUser(){
@@ -137,5 +141,22 @@ public class LoginController {
                 entity = new ResponseEntity<>(map,HttpStatus.BAD_REQUEST);
             }
             return entity;
+    }
+
+    @GetMapping(value = "/jms/download", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Callable<ResponseEntity<?>> downloadBooks() {
+        return  () ->{
+
+            ResponseEntity<Map<String,Object>> entity = null;
+            Map<String,Object> map = new HashMap<>();
+
+            for (int i = 0 ; i < 100 ;i++){
+                jmsTemplate.convertAndSend("book",new Book("android",1344d));
+            }
+            map.put("sts","starting dwonload");
+            entity = new ResponseEntity<>(map,HttpStatus.OK);
+
+            return entity;
+        };
     }
 }

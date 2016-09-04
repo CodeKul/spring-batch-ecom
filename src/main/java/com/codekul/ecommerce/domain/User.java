@@ -8,6 +8,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "tab_user")
+@Deprecated
 public class User {
 
     @Id

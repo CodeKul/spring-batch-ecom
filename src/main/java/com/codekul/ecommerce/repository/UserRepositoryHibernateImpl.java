@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Created by aniruddha on 27/8/16.
  */
+@Deprecated
 @Repository
 @Transactional(propagation = Propagation.REQUIRES_NEW)
 public class UserRepositoryHibernateImpl implements UserRepository{

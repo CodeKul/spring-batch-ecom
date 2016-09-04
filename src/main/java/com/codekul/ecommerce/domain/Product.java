@@ -1,10 +1,17 @@
 package com.codekul.ecommerce.domain;
 
+import javax.persistence.*;
+
 /**
  * Created by aniruddha on 7/8/16.
  */
+@Entity
+@Table(name = "tab_product")
 public class Product {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "product_id")
     private Long id;
     private String name;
     private String image;
